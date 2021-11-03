@@ -2,6 +2,10 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-# hello_world:
-#    path: /hello
+#index:
+#    path: /
+#    controller: App\Controller\MainController::index
+
+# marmiton:
+#    path: /
 #    controller: App\Controller\HelloController::world
