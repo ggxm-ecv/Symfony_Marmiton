@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Rate;
 use App\Form\RateType;
+use App\Entity\Comment;
+use App\Form\CommentType;
+use App\Entity\User;
 
 /**
  * @Route("/recipe")
@@ -60,24 +63,33 @@ class RecipeController extends AbstractController
         $form1 = $this->createForm(RateType::class, $rate);
         $form1->handleRequest($request);
 
+        $comment = new Comment();
+        $comment->setRecipe($recipe);
+        if ($this->getUser()) {
+            $comment->setAuthor($this->getUser());
+        }
+        $form2 = $this->createForm(CommentType::class, $comment);
+        $form2->handleRequest($request);
+
         if ($form1->isSubmitted() && $form1->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rate);
             $entityManager->flush();
 
-            // return $this->redirectToRoute('rate_index', [], Response::HTTP_SEE_OTHER);
-
-            return $this->render('recipe/show.html.twig', [
-                'recipe' => $recipe,
-                'form1' => $form1->createView(),
-            ]);
-        } else {
-            // return de base
-            return $this->render('recipe/show.html.twig', [
-                'recipe' => $recipe,
-                'form1' => $form1->createView(),
-            ]);
         }
+        
+        if ($form2->isSubmitted() && $form2->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+        }
+
+        return $this->render('recipe/show.html.twig', [
+            'recipe' => $recipe,
+            'form1' => $form1->createView(),
+            'form2' => $form2->createView(),
+        ]);
 
     }
 

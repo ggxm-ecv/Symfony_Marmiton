@@ -44,12 +44,41 @@
                     no rate found
                 {% endfor %}
                 </td>
+            </tr>
+            <tr>
+                <th>Add Rate</th>
                 <td>
                     {# form to add rate #}
                     {{ form_start(form1) }}
                         {{ form_row(form1.score) }}
                         <button class="btn">{{ button_label|default('Save') }}</button>
                     {{ form_end(form1) }}
+                </td>
+            </tr>
+            <tr>
+                <th>Comments</th>
+                <td>
+                    {% for comment in recipe.comments %}
+                        <tr>
+                            <td>{{ comment.title }}</td>
+                            <td>{{ comment.description }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td>no records found</td>
+                        </tr>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Add Comment</th>
+                <td>
+                    {# form to add comment #}
+                    {{ form_start(form2) }}
+                        {{ form_row(form2.title) }}
+                        {{ form_row(form2.description) }}
+                        <button class="btn">{{ button_label|default('Save') }}</button>
+                    {{ form_end(form2) }}
                 </td>
             </tr>
         </tbody>
