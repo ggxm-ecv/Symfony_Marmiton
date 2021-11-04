@@ -162,17 +162,15 @@ class Recipe
 
     public function getAverageRate(): ?float
     {
-        // $rates = $this->rates->map(fn (Rate $rate) => $rate->getRate());
 
-        // return \array_sum($rates->toArray()) / $rates->count();
-        return $this->averageRate;
-    }
-
-    public function setAverageRate(?float $averageRate): self
-    {
-        $this->averageRate = $averageRate;
-
-        return $this;
+        $rates = $this->rates->map(fn (Rate $rate) => $rate->getScore());
+        
+        if (!empty($rates->toArray())) {
+            return \array_sum($rates->toArray()) / $rates->count();
+        } else {
+            // return $this->averageRate;
+            return null;
+        }
     }
 
     /**
