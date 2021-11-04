@@ -72,6 +72,8 @@ class RecipeController extends AbstractController
         $form2->handleRequest($request);
 
         if ($form1->isSubmitted() && $form1->isValid()) {
+            $averageRate = $recipe->getAverageRate();
+            $recipe->setAverageRate($averageRate);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rate);
             $entityManager->flush();

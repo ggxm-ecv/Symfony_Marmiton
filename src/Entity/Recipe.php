@@ -174,6 +174,14 @@ class Recipe
         }
     }
 
+    public function setAverageRate(float $averageRate): self
+    {
+
+        $this->averageRate = $averageRate;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Rate[]
      */
