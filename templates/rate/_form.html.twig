@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.preparationTime) }}
+    {{ form_row(form.cookingTime) }}
+    {# {{ form_row(form.ingredientList) }} #}
+    {{ form_row(form.steps) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
