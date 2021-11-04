@@ -34,17 +34,27 @@
                 {% for quantities in recipe.quantities %}
                     {{ quantities.quantity }} > {{ quantities.ingredient }} / 
                 {% else %}
-                    no rate found
+                    no ingredient found
                 {% endfor %}
                 </td>
             </tr>
             <tr>
                 <th>Steps</th>
-                <td>{{ recipe.steps ? recipe.steps|join(', ') : '' }}</td>
+                <td>
+                {% for step in recipe.steps %}
+                    {{ step.description }}
+                {% else %}
+                    no step found
+                {% endfor %}
+                </td>
             </tr>
+            {# <tr>
+                <th>Steps</th>
+                <td>{{ recipe.steps ? recipe.steps|join(', ') : '' }}</td>
+            </tr> #}
             <tr>
                 <th>AverageRate</th>
-                <td>{{ recipe.averageRate }}</td>
+                <td>{{ recipe.averageRate|round(1, 'floor') }}</td>
             </tr>
             <tr>
                 <th>Rates</th>

@@ -41,11 +41,6 @@ class Recipe
     private $cookingTime;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $steps = [];
-
-    /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="recipe")
      */
     private $comments;
@@ -70,12 +65,18 @@ class Recipe
      */
     public $favorite;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Step::class, mappedBy="recipe", cascade={"persist"})
+     */
+    private $steps;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->rates = new ArrayCollection();
         $this->quantities = new ArrayCollection();
         $this->favorites = new ArrayCollection();
+        $this->steps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,18 +116,6 @@ class Recipe
     public function setCookingTime(?\DateTimeInterface $cookingTime): self
     {
         $this->cookingTime = $cookingTime;
-
-        return $this;
-    }
-
-    public function getSteps(): ?array
-    {
-        return $this->steps;
-    }
-
-    public function setSteps(?array $steps): self
-    {
-        $this->steps = $steps;
 
         return $this;
     }
@@ -269,5 +258,35 @@ class Recipe
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|Step[]
+     */
+    public function getSteps(): Collection
+    {
+        return $this->steps;
+    }
+
+    public function addStep(Step $step): self
+    {
+        if (!$this->steps->contains($step)) {
+            $this->steps[] = $step;
+            $step->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): self
+    {
+        if ($this->steps->removeElement($step)) {
+            // set the owning side to null (unless already changed)
+            if ($step->getRecipe() === $this) {
+                $step->setRecipe(null);
+            }
+        }
+
+        return $this;
     }
 }

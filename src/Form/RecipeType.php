@@ -7,8 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Form\QuantityType;
+use App\Form\StepType;
 
 class RecipeType extends AbstractType
 {
@@ -24,12 +24,12 @@ class RecipeType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false
             ])
-            // ->add('steps', CollectionType::class, [
-            //     'entry_type' => TextareaType::class,
-            //     'entry_options' => ['label' => false],
-            //     'allow_add' => true,
-            //     'by_reference' => false
-            // ])
+            ->add('steps', CollectionType::class, [
+                'entry_type' => StepType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false
+            ])
             
         ;
     }
