@@ -2,6 +2,10 @@
 
 {% block title %}Recipe{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+{% endblock %}
+
 {% block body %}
     <h1>Recipe</h1>
 
@@ -37,6 +41,21 @@
             </tr>
         </tbody>
     </table>
+    {# <div>
+        {% if is_granted("ROLE_USER") %}
+            {% for favorites in recipe.favorites %}
+                {% if favorites.id == app.user.id %}
+                    <i class="fas fa-heart"></i>
+                {% else %}
+                    <a href="{{ path('recipe_index/ajout_favorite', {id: recipe.id}) }}"><i class="far fa-heart"></i></a>
+                {% endif %}
+            {% else %}
+                <a href="{{ path('recipe_index/ajout_favorite', {id: recipe.id}) }}"><i class="far fa-heart"></i></a>
+            {% endfor %}
+        {% else %}
+            <i class="far fa-heart"></i>
+        {% endif %}
+    </div> #}
 
     <a href="{{ path('recipe_index') }}">back to list</a>
 

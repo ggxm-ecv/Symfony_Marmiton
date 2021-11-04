@@ -44,9 +44,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Recipe::class, mappedBy="favorite")
+     */
+    private $favorite;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->favorite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +169,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($comment->getAuthor() === $this) {
                 $comment->setAuthor(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Recipe[]
+     */
+    public function getFavorite(): Collection
+    {
+        return $this->favorite;
+    }
+
+    public function addFavorite(Recipe $favorite): self
+    {
+        if (!$this->favorite->contains($favorite)) {
+            $this->favorite[] = $favorite;
+            $favorite->addFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Recipe $favorite): self
+    {
+        if ($this->favorite->removeElement($favorite)) {
+            $favorite->removeFavorite($this);
         }
 
         return $this;

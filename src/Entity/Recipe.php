@@ -6,9 +6,12 @@ use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
+ * @UniqueEntity("name")
  */
 class Recipe
 {
@@ -21,16 +24,19 @@ class Recipe
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="time", nullable=true)
+     * @Assert\NotBlank
      */
     private $preparationTime;
 
     /**
      * @ORM\Column(type="time", nullable=true)
+     * @Assert\NotBlank
      */
     private $cookingTime;
 
@@ -56,13 +62,20 @@ class Recipe
 
     /**
      * @ORM\OneToMany(targetEntity=Rate::class, mappedBy="recipe")
+     * @Assert\Range(min = 0, max = 5)
      */
     private $rates;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="favorite")
+     */
+    public $favorite;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->rates = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,6 +212,30 @@ class Recipe
                 $rate->setRecipe(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFavorite(): Collection
+    {
+        return $this->favorite;
+    }
+
+    public function addFavorite(User $favorite): self
+    {
+        if (!$this->favorite->contains($favorite)) {
+            $this->favorite[] = $favorite;
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(User $favorite): self
+    {
+        $this->favorite->removeElement($favorite);
 
         return $this;
     }
