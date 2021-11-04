@@ -35,6 +35,23 @@
                 <th>AverageRate</th>
                 <td>{{ recipe.averageRate }}</td>
             </tr>
+            <tr>
+                <th>Rates</th>
+                <td>
+                {% for rate in recipe.rates %}
+                    {{ rate.score }} / 
+                {% else %}
+                    no rate found
+                {% endfor %}
+                </td>
+                <td>
+                    {# form to add rate #}
+                    {{ form_start(form1) }}
+                        {{ form_row(form1.score) }}
+                        <button class="btn">{{ button_label|default('Save') }}</button>
+                    {{ form_end(form1) }}
+                </td>
+            </tr>
         </tbody>
     </table>
 

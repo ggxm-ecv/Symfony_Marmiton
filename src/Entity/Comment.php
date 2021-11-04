@@ -30,11 +30,6 @@ class Comment
     private $description;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $rate;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -45,16 +40,6 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $recipe;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Rate::class, mappedBy="comment")
-     */
-    private $rates;
-
-    public function __construct()
-    {
-        $this->rates = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -85,18 +70,6 @@ class Comment
         return $this;
     }
 
-    public function getRate(): ?int
-    {
-        return $this->rate;
-    }
-
-    public function setRate(int $rate): self
-    {
-        $this->rate = $rate;
-
-        return $this;
-    }
-
     public function getAuthor(): ?User
     {
         return $this->author;
@@ -120,34 +93,5 @@ class Comment
 
         return $this;
     }
-
-    /**
-     * @return Collection|Rate[]
-     */
-    public function getRates(): Collection
-    {
-        return $this->rates;
-    }
-
-    public function addRate(Rate $rate): self
-    {
-        if (!$this->rates->contains($rate)) {
-            $this->rates[] = $rate;
-            $rate->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRate(Rate $rate): self
-    {
-        if ($this->rates->removeElement($rate)) {
-            // set the owning side to null (unless already changed)
-            if ($rate->getComment() === $this) {
-                $rate->setComment(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }

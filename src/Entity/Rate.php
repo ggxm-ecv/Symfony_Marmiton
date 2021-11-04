@@ -23,12 +23,6 @@ class Rate
     private $score;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="rates")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $comment;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Recipe::class, inversedBy="rates")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -47,18 +41,6 @@ class Rate
     public function setScore(int $score): self
     {
         $this->score = $score;
-
-        return $this;
-    }
-
-    public function getComment(): ?Comment
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?Comment $comment): self
-    {
-        $this->comment = $comment;
 
         return $this;
     }

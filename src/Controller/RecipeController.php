@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Rate;
+use App\Form\RateType;
 
 /**
  * @Route("/recipe")
@@ -49,13 +51,34 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="recipe_show", methods={"GET"})
+     * @Route("/{id}", name="recipe_show", methods={"GET","POST"})
      */
-    public function show(Recipe $recipe): Response
+    public function show(Recipe $recipe, Request $request): Response
     {
-        return $this->render('recipe/show.html.twig', [
-            'recipe' => $recipe,
-        ]);
+        $rate = new Rate();
+        $rate->setRecipe($recipe);
+        $form1 = $this->createForm(RateType::class, $rate);
+        $form1->handleRequest($request);
+
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($rate);
+            $entityManager->flush();
+
+            // return $this->redirectToRoute('rate_index', [], Response::HTTP_SEE_OTHER);
+
+            return $this->render('recipe/show.html.twig', [
+                'recipe' => $recipe,
+                'form1' => $form1->createView(),
+            ]);
+        } else {
+            // return de base
+            return $this->render('recipe/show.html.twig', [
+                'recipe' => $recipe,
+                'form1' => $form1->createView(),
+            ]);
+        }
+
     }
 
     /**
@@ -91,4 +114,5 @@ class RecipeController extends AbstractController
 
         return $this->redirectToRoute('recipe_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }
