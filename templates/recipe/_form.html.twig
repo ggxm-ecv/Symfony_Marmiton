@@ -1,4 +1,13 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.preparationTime) }}
+    {{ form_row(form.cookingTime) }}
+
+    <ul class="quantities" data-index="{{ form.quantities|length > 0 ? form.quantities|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.quantities.vars.prototype)|e('html_attr') }}"></ul>
+    <button type="button" class="add_item_link" data-collection-holder-class="quantities">Add quantity</button>
+
+    {# <ul class="steps" data-index="{{ form.steps|length > 0 ? form.steps|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.steps.vars.prototype)|e('html_attr') }}"></ul>
+    <button type="button" class="add_item_link" data-collection-holder-class="steps">Add step</button> #}
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

@@ -24,8 +24,15 @@
                 <td>{{ recipe.cookingTime ? recipe.cookingTime|date('H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>IngredientList</th>
-                <td>{{ recipe.ingredientList ? recipe.ingredientList|join(', ') : '' }}</td>
+                <th>IngredientList (quantities)</th>
+                {# <td>{{ recipe.ingredientList ? recipe.ingredientList|join(', ') : '' }}</td> #}
+                <td>
+                {% for quantities in recipe.quantities %}
+                    {{ quantities.quantity }} > {{ quantities.ingredient }} / 
+                {% else %}
+                    no rate found
+                {% endfor %}
+                </td>
             </tr>
             <tr>
                 <th>Steps</th>

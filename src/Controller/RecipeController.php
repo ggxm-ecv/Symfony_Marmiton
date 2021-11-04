@@ -128,3 +128,13 @@ class RecipeController extends AbstractController
     }
     
 }
+
+// Test if already post form
+
+// RateRepository $rateRepository,
+
+// $user = $this->getUser();
+// $alreadyRated = null !== $rateRepository->findOneBy([
+//     'author' => $user,
+//     'recipe' => $recipe,
+// ]);

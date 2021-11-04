@@ -37,11 +37,6 @@ class Recipe
     /**
      * @ORM\Column(type="array", nullable=true)
      */
-    private $ingredientList = [];
-
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
     private $steps = [];
 
     /**
@@ -59,10 +54,16 @@ class Recipe
      */
     private $rates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Quantity::class, mappedBy="recipe", cascade={"persist"})
+     */
+    private $quantities;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->rates = new ArrayCollection();
+        $this->quantities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,18 +103,6 @@ class Recipe
     public function setCookingTime(?\DateTimeInterface $cookingTime): self
     {
         $this->cookingTime = $cookingTime;
-
-        return $this;
-    }
-
-    public function getIngredientList(): ?array
-    {
-        return $this->ingredientList;
-    }
-
-    public function setIngredientList(?array $ingredientList): self
-    {
-        $this->ingredientList = $ingredientList;
 
         return $this;
     }
@@ -206,5 +195,35 @@ class Recipe
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|Quantity[]
+     */
+    public function getQuantities(): Collection
+    {
+        return $this->quantities;
+    }
+
+    public function addQuantity(Quantity $quantity): self
+    {
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities[] = $quantity;
+            $quantity->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuantity(Quantity $quantity): self
+    {
+        if ($this->quantities->removeElement($quantity)) {
+            // set the owning side to null (unless already changed)
+            if ($quantity->getRecipe() === $this) {
+                $quantity->setRecipe(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -12,7 +12,7 @@
                 <th>Name</th>
                 <th>PreparationTime</th>
                 <th>CookingTime</th>
-                <th>IngredientList</th>
+                {# <th>IngredientList</th> #}
                 <th>Steps</th>
                 <th>AverageRate</th>
                 <th>actions</th>
@@ -25,7 +25,7 @@
                 <td>{{ recipe.name }}</td>
                 <td>{{ recipe.preparationTime ? recipe.preparationTime|date('H:i:s') : '' }}</td>
                 <td>{{ recipe.cookingTime ? recipe.cookingTime|date('H:i:s') : '' }}</td>
-                <td>{{ recipe.ingredientList ? recipe.ingredientList|join(', ') : '' }}</td>
+                {# <td>{{ recipe.ingredientList ? recipe.ingredientList|join(', ') : '' }}</td> #}
                 <td>{{ recipe.steps ? recipe.steps|join(', ') : '' }}</td>
                 <td>{{ recipe.averageRate }}</td>
                 <td>
