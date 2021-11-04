@@ -16,12 +16,12 @@ use App\Form\CommentType;
 use App\Entity\User;
 
 /**
- * @Route("/recipe")
+ * @Route("/recipe", name="recipe_")
  */
 class RecipeController extends AbstractController
 {
     /**
-     * @Route("/", name="recipe_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(RecipeRepository $recipeRepository): Response
     {
@@ -31,7 +31,7 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="recipe_new", methods={"GET","POST"})
+     * @Route("/new", name="new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -54,7 +54,7 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="recipe_show", methods={"GET","POST"})
+     * @Route("/{id}", name="show", methods={"GET","POST"})
      */
     public function show(Recipe $recipe, Request $request): Response
     {
@@ -94,7 +94,7 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="recipe_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Recipe $recipe): Response
     {
@@ -114,7 +114,7 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="recipe_delete", methods={"POST"})
+     * @Route("/{id}", name="delete", methods={"POST"})
      */
     public function delete(Request $request, Recipe $recipe): Response
     {
@@ -126,7 +126,37 @@ class RecipeController extends AbstractController
 
         return $this->redirectToRoute('recipe_index', [], Response::HTTP_SEE_OTHER);
     }
-    
+
+    /**
+     * @Route("/favorite/ajout/{id}", name="ajout_favorite")
+     */
+    public function addFavorites(Recipe $recipe)
+    {
+        $recipe->addFavorite($this->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($recipe);
+        $em->flush();
+
+        return $this->redirectToRoute('recipe_index');
+    }
+
+    /**
+     * @Route("/favorite/remove/{id}", name="remove_favorite")
+     */
+    public function removeFavorites(Recipe $recipe)
+    {
+        $recipe->removeFavorite($this->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($recipe);
+        $em->flush();
+
+        return $this->redirectToRoute('recipe_index');
+    }
+
+
+
 }
 
 // Test if already post form
